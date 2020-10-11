@@ -9,4 +9,8 @@ export class TodoService extends NgEntityService<TodoState> {
     super(store);
   }
 
+  reset(): void {
+    this.store.reset();
+  }
+
 }

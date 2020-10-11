@@ -7,6 +7,7 @@ import { AuthService } from '../auth/state/auth.service';
 import { Todo } from './state/todo.model';
 import { TodoQuery } from './state/todo.query';
 import { TodoService } from './state/todo.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-todos',
@@ -39,14 +40,14 @@ export class TodosComponent implements OnInit, OnDestroy {
   }
 
   getAll(): void {
-    this.todoService.get().subscribe();
+    this.todoService.get().pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   add(): void {
     const title = this.formControl.value;
     if (title?.trim()) {
 
-      this.todoService.add({title}).subscribe(() => {
+      this.todoService.add({title}).pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.reset();
       });
 
@@ -58,15 +59,16 @@ export class TodosComponent implements OnInit, OnDestroy {
   }
 
   onComplete(todo: Todo): void {
-    this.todoService.update(todo.id, todo).subscribe();
+    this.todoService.update(todo.id, todo).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   onDelete(id: string): void {
-    this.todoService.delete(id).subscribe();
+    this.todoService.delete(id).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   logout(): void {
     this.authService.reset();
+    this.todoService.reset();
     this.router.navigate(['login']);
   }
 }
