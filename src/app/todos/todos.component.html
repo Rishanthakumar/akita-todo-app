@@ -1,0 +1,22 @@
+<div style="display: flex; justify-content: space-between;">
+    <div style="display: flex; justify-content: flex-start">
+       <h5> Hi {{username$ | async}} </h5> 
+    </div>
+
+    <div style="display: flex; justify-content: flex-end">
+        <button class="btn" (click)="logout()">Logout</button>
+    </div>
+</div>
+
+<div class="input-field">
+    <i class="material-icons prefix">add_alarm</i>
+    <input type="text" [formControl]="formControl" class="form-control" placeholder="Add Todo..." #input
+        (keydown.enter)="add()">
+</div>
+
+
+<div class="collection with-header">
+    <h4 class="collection-header">Todos:</h4>
+    <app-todo *ngFor="let todo of (todos$ | async)" class="collection-item" (deleteTodo)="onDelete($event)"
+        (completeTodo)="onComplete($event)" [todo]="todo"></app-todo>
+</div>
